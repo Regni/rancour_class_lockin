@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Test from "./testItem";
+import DiscordCheckPage from "./DiscordCheckPage";
 
 export default function Home() {
   return (
@@ -59,6 +61,8 @@ export default function Home() {
             Documentation
           </a>
         </div>
+        <Test />
+        <DiscordCheckPage />
       </main>
     </div>
   );
