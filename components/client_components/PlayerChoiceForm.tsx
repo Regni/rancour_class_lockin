@@ -16,7 +16,7 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
     try {
       const res = await fetch("/api/data/raiders", {
         method: "POST",
-        headers: {},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           discordId: playerInfo.discordId,
           choice: selectedClass,
@@ -50,7 +50,10 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
         return;
       }
 
-      const resDB = await fetch(`/api/data/raiders?id=${data.discordId}`);
+      const resDB = await fetch(`/api/data/raiders?id=${data.discordId}`, {
+        cache: "no-store",
+        credentials: "include",
+      });
       const dbData = await resDB.json();
       if (!dbData || dbData.length === 0) {
         setPlayerInfo({ ...data, dbInfo: null });
