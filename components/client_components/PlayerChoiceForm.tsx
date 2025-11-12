@@ -55,15 +55,15 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
         credentials: "include",
       });
       const dbData = await resDB.json();
-      if (!dbData || dbData.length === 0) {
+      if (!dbData) {
         setPlayerInfo({ ...data, dbInfo: null });
         return;
       }
 
-      setPlayerInfo({ ...data, dbInfo: dbData[0] });
-      setSelectedClass(dbData[0].choice);
+      setPlayerInfo({ ...data, dbInfo: dbData });
+      setSelectedClass(dbData.choice);
 
-      const lastUpdate = new Date(dbData[0].updatedAt);
+      const lastUpdate = new Date(dbData.updatedAt);
       const now = Date.now();
       const timeDifference = now - lastUpdate.getTime();
       const cooldown = 15 * 60 * 1000;

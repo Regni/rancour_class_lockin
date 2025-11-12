@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const discordId = searchParams.get("discordId");
+  const discordId = searchParams.get("id");
 
   if (discordId) {
     const raider = await getRaider(discordId);
