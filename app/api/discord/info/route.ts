@@ -12,6 +12,7 @@ export async function GET() {
 
   const guildId = process.env.RANCOUR_GUILD_ID!;
   const raiderRoleId = process.env.RANCOUR_RAIDER_ROLE_ID!;
+  const officerRoleId = process.env.RANCOUR_OFFICER_ROLE_ID!;
 
   const res = await fetch(
     `https://discord.com/api/v10/users/@me/guilds/${guildId}/member`,
@@ -39,5 +40,14 @@ export async function GET() {
   const discordId = member.user?.id;
   const isRaider =
     Array.isArray(member.roles) && member.roles.includes(raiderRoleId);
-  return NextResponse.json({ inGuild: true, isRaider, nickname, discordId });
+  const isOfficer =
+    Array.isArray(member.roles) && member.roles.includes(officerRoleId);
+
+  return NextResponse.json({
+    inGuild: true,
+    isRaider,
+    isOfficer,
+    nickname,
+    discordId,
+  });
 }

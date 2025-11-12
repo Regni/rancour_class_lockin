@@ -1,4 +1,5 @@
 import { getAllRaiders, getRaider, setRaiderChoice } from "@/db/Raiders";
+import { VALID_CHOICES, type ClassChoice } from "@/lib/constants";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -21,6 +22,13 @@ export async function POST(req: Request) {
   if (!discordId || !choice) {
     return NextResponse.json(
       { error: "Missing required fields" },
+      { status: 400 }
+    );
+  }
+
+  if (!VALID_CHOICES.includes(choice as ClassChoice)) {
+    return NextResponse.json(
+      { error: "Invalid class choice" },
       { status: 400 }
     );
   }

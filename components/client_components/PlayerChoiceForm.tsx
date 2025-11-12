@@ -1,9 +1,8 @@
 "use client";
-import { clear } from "console";
-import React, { use, useEffect, useState } from "react";
+
+import React, { useEffect, useState } from "react";
 
 const PlayerChoiceForm = () => {
-  const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [playerInfo, setPlayerInfo] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -25,7 +24,6 @@ const PlayerChoiceForm = () => {
       });
       if (res.status === 429) {
         const retryAfter = res.headers.get("Retry-After");
-        console.log("Retry-After header:", retryAfter);
         if (retryAfter) {
           setCooldown(parseInt(retryAfter, 10) * 1000);
           setCanSubmit(false);
@@ -34,7 +32,6 @@ const PlayerChoiceForm = () => {
       const data = await res.json();
       setCooldown(15 * 60 * 1000);
       setCanSubmit(false);
-      console.log("Submit result:", data);
     } catch (err) {
       console.error("Error:", err);
     } finally {
@@ -44,7 +41,7 @@ const PlayerChoiceForm = () => {
 
   const playerData = async () => {
     try {
-      const res = await fetch("/api/discord/test");
+      const res = await fetch("/api/discord/info");
       const data = await res.json();
       if (!data.inGuild || !data.isRaider) {
         setErrorMessage(
@@ -80,11 +77,6 @@ const PlayerChoiceForm = () => {
   useEffect(() => {
     playerData();
   }, []);
-
-  useEffect(() => {
-    console.log("Player Info Updated:", playerInfo);
-    console.log("Selected Class:", selectedClass);
-  }, [playerInfo]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;

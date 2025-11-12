@@ -7,7 +7,6 @@ interface ExtendedSession extends Session {
 }
 
 export const authOptions: NextAuthOptions = {
-  debug: true,
   providers: [
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID!,
