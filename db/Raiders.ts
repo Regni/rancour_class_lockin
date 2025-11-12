@@ -14,7 +14,6 @@ const COLLECTION = "Raiders";
 
 export async function getRaider(discordId: string) {
   const client = await clientPromise;
-  console.log(client);
   const db = client.db(DB_NAME);
   const col = db.collection<RaiderDoc>(COLLECTION);
   return col.findOne({ discordId }, { projection: { _id: 0 } });
@@ -65,7 +64,7 @@ export async function setRaiderChoice(
           updatedAt: now,
           createdAt: { $ifNull: ["$createdAt", now] },
           ...(raiderName
-            ? { raiderName: { $ifNull: ["$name", raiderName] } }
+            ? { raiderName: { $ifNull: ["$raiderName", raiderName] } }
             : {}),
         },
       },
