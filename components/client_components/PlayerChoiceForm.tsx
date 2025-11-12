@@ -27,6 +27,7 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
         if (retryAfter) {
           setCooldown(parseInt(retryAfter, 10) * 1000);
           setCanSubmit(false);
+          return;
         }
       }
       setCooldown(15 * 60 * 1000);
@@ -72,9 +73,7 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
       console.error("Error:", err);
     }
   };
-  useEffect(() => {
-    console.log("playerInfo changed", playerInfo);
-  }, [playerInfo]);
+
   useEffect(() => {
     playerData();
   }, []);
