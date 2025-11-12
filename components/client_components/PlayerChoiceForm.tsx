@@ -57,6 +57,7 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
       const dbData = await resDB.json();
       if (!dbData) {
         setPlayerInfo({ ...data, dbInfo: null });
+        setCanSubmit(true);
         return;
       }
 
