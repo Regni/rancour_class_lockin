@@ -7,7 +7,7 @@ const RaiderList = async () => {
   const classImg = (classChoice: string) => {
     //return class icon based on raider choice
     switch (classChoice) {
-      case "DeathkKnight":
+      case "DeathKnight":
         return "https://wow.zamimg.com/images/wow/icons/large/classicon_deathknight.jpg";
       case "DemonHunter":
         return "https://wow.zamimg.com/images/wow/icons/large/classicon_demonhunter.jpg";

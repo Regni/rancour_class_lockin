@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { discordCache } from "@/lib/discordCashe";
 
 const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
   const [loading, setLoading] = useState(false);
@@ -8,7 +9,7 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedClass, setSelectedClass] = useState("Druid");
   const [cooldown, setCooldown] = useState<number>(0);
-  const [canSubmit, setCanSubmit] = useState(true);
+  const [canSubmit, setCanSubmit] = useState(false);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -41,8 +42,7 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
 
   const playerData = async () => {
     try {
-      const res = await fetch("/api/discord/info");
-      const data = await res.json();
+      const data = await discordCache();
       if (!data.inGuild || !data.isRaider) {
         setErrorMessage(
           "You are not a member of the guild or do not have the raider rank."
@@ -68,7 +68,9 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
         const timeLeft = cooldown - timeDifference;
         setCanSubmit(false);
         setCooldown(timeLeft);
+        return;
       }
+      setCanSubmit(true);
     } catch (err) {
       console.error("Error:", err);
     }
