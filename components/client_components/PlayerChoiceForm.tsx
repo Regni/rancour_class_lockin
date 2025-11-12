@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-const PlayerChoiceForm = () => {
+const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
   const [loading, setLoading] = useState(false);
   const [playerInfo, setPlayerInfo] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -19,7 +19,7 @@ const PlayerChoiceForm = () => {
         body: JSON.stringify({
           discordId: playerInfo.discordId,
           choice: selectedClass,
-          raiderName: playerInfo.nickname,
+          raiderName: playerInfo.nickname || discordName,
         }),
       });
       if (res.status === 429) {
@@ -29,7 +29,6 @@ const PlayerChoiceForm = () => {
           setCanSubmit(false);
         }
       }
-      const data = await res.json();
       setCooldown(15 * 60 * 1000);
       setCanSubmit(false);
     } catch (err) {
@@ -73,7 +72,9 @@ const PlayerChoiceForm = () => {
       console.error("Error:", err);
     }
   };
-
+  useEffect(() => {
+    console.log("playerInfo changed", playerInfo);
+  }, [playerInfo]);
   useEffect(() => {
     playerData();
   }, []);
