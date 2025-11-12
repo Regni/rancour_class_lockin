@@ -10,7 +10,10 @@ export async function discordCache() {
     }
   }
 
-  const res = await fetch("/api/discord/info");
+  const res = await fetch("/api/discord/info", {
+    cache: "no-store",
+    credentials: "include",
+  });
   const data = await res.json();
   sessionStorage.setItem(key, JSON.stringify({ timestamp: Date.now(), data }));
   return data;

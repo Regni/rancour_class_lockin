@@ -2,6 +2,24 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+function noStoreJson(body: any, status = 200) {
+  return NextResponse.json(body, {
+    status,
+    headers: {
+      "Cache-Control": "no-store, private, max-age=0, must-revalidate",
+      Pragma: "no-cache",
+      Expires: "0",
+      Vary: "Cookie",
+      "Netlify-CDN-Cache-Control": "no-store",
+      "CDN-Cache-Control": "no-store",
+    },
+  });
+}
+
 export async function GET() {
   const session = await getServerSession(authOptions);
   const accessToken = (session as any)?.accessToken as string | undefined;
@@ -16,23 +34,20 @@ export async function GET() {
 
   const res = await fetch(
     `https://discord.com/api/v10/users/@me/guilds/${guildId}/member`,
-    { headers: { Authorization: `Bearer ${accessToken}` } }
+    { headers: { Authorization: `Bearer ${accessToken}` }, cache: "no-store" }
   );
 
   if (res.status === 404) {
-    return NextResponse.json({ inGuild: false });
+    return noStoreJson({ inGuild: false });
   }
   if (res.status === 401 || res.status === 403) {
-    return NextResponse.json(
+    return noStoreJson(
       { error: `Discord ${res.status} (bad/expired token or missing scope)` },
-      { status: res.status }
+      res.status
     );
   }
   if (!res.ok) {
-    return NextResponse.json(
-      { error: `Discord error ${res.status}` },
-      { status: res.status }
-    );
+    return noStoreJson({ error: `Discord error ${res.status}` }, res.status);
   }
 
   const member = await res.json();
@@ -43,7 +58,7 @@ export async function GET() {
   const isOfficer =
     Array.isArray(member.roles) && member.roles.includes(officerRoleId);
 
-  return NextResponse.json({
+  return noStoreJson({
     inGuild: true,
     isRaider,
     isOfficer,
