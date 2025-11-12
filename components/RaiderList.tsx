@@ -42,6 +42,11 @@ const RaiderList = async () => {
 
   return (
     <div className="mt-10 w-full flex flex-col items-center">
+      <h2 className="text-2xl mb-2">Raider Choices</h2>
+      <p className="mb-4 italic text-sm text-gray-300">
+        (Reload to see your changes for now, I am sure you remember your
+        choice!)
+      </p>
       <table className="table-auto border-collapse border grow w-60 border-gray-400">
         <thead>
           <tr className="border-b">
