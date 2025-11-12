@@ -35,8 +35,9 @@ export async function GET() {
   }
 
   const member = await res.json();
+  const nickname = member.nick;
+  const discordId = member.user?.id;
   const isRaider =
     Array.isArray(member.roles) && member.roles.includes(raiderRoleId);
-
-  return NextResponse.json({ inGuild: true, isRaider, member });
+  return NextResponse.json({ inGuild: true, isRaider, nickname, discordId });
 }

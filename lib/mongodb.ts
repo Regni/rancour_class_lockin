@@ -4,7 +4,7 @@ const DATABASE_URL = process.env.DATABASE_URL!;
 const options = {};
 
 declare global {
-  // eslint-disable-next-line no-var
+  // var is used here to prevent errors in developement mode with hot reloading
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
