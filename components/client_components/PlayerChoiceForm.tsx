@@ -103,7 +103,7 @@ const PlayerChoiceForm = ({
         setCooldown((prev) => {
           if (prev <= 1000) {
             clearInterval(timer);
-            setCanSubmit(true);
+            setCanSubmit(false);
             return 0;
           }
           return prev - 1000;
