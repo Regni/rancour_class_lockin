@@ -2,8 +2,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import LoginButtons from "../components/client_components/LoginButtons";
 import LogoutButtons from "../components/client_components/LogoutButtons";
-import PlayerChoiceForm from "@/components/client_components/PlayerChoiceForm";
-import RaiderList from "@/components/RaiderList";
 import { getAllRaiders } from "@/db/Raiders";
 import ClientRaiderList from "@/components/client_components/ClientRaiderlist";
 
