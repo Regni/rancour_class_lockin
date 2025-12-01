@@ -5,7 +5,7 @@ export async function discordCache() {
   if (cached) {
     const { timestamp, data } = JSON.parse(cached);
 
-    if (Date.now() - timestamp < 5 * 60 * 1000) {
+    if (Date.now() - timestamp < 10 * 60 * 1000) {
       return data;
     }
   }

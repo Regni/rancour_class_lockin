@@ -1,6 +1,6 @@
 import clientPromise from "@/lib/mongodb";
 
-type RaiderDoc = {
+export type RaiderDoc = {
   discordId: string;
   raiderName: string;
   choice?: string | null;
