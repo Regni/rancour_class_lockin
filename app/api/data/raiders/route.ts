@@ -14,7 +14,7 @@ export async function GET(req: Request) {
   const raiders = await getAllRaiders();
   return NextResponse.json(raiders);
 }
-const CooldownPeriod = 15 * 60 * 1000;
+const CooldownPeriod = 5 * 1000;
 export async function POST(req: Request) {
   const data = await req.json();
   const { discordId, choice, raiderName } = data;
@@ -33,6 +33,7 @@ export async function POST(req: Request) {
     );
   }
   const raider = await getRaider(discordId);
+
   const now = Date.now();
 
   if (raider?.updatedAt) {
@@ -52,6 +53,16 @@ export async function POST(req: Request) {
         }
       );
     }
+  }
+
+  if (raider) {
+    return NextResponse.json(
+      {
+        error:
+          "You have already locked in your class. This can only be done once.",
+      },
+      { status: 403 }
+    );
   }
 
   const doc = await setRaiderChoice(discordId, choice, raiderName);

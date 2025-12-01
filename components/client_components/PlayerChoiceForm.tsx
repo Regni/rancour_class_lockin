@@ -3,7 +3,13 @@
 import React, { useEffect, useState } from "react";
 import { discordCache } from "@/lib/discordCashe";
 
-const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
+const PlayerChoiceForm = ({
+  discordName,
+  setRaiderChoice,
+}: {
+  discordName: string;
+  setRaiderChoice?: any;
+}) => {
   const [loading, setLoading] = useState(false);
   const [playerInfo, setPlayerInfo] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -31,12 +37,17 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
           return;
         }
       }
-      setCooldown(15 * 60 * 1000);
+      setCooldown(59 * 1000);
       setCanSubmit(false);
     } catch (err) {
       console.error("Error:", err);
     } finally {
       setLoading(false);
+      setRaiderChoice({
+        discordId: playerInfo.discordId,
+        choice: selectedClass,
+        raiderName: playerInfo.nickname || discordName,
+      });
     }
   };
 
@@ -67,14 +78,15 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
       const lastUpdate = new Date(dbData.updatedAt);
       const now = Date.now();
       const timeDifference = now - lastUpdate.getTime();
-      const cooldown = 15 * 60 * 1000;
+      const cooldown = 59 * 1000;
       if (timeDifference < cooldown) {
         const timeLeft = cooldown - timeDifference;
         setCanSubmit(false);
         setCooldown(timeLeft);
         return;
       }
-      setCanSubmit(true);
+
+      setCanSubmit(false);
     } catch (err) {
       console.error("Error:", err);
     }
@@ -107,16 +119,26 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
 
   const formatTime = (ms: number) => {
     const totalSeconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
+
+    const days = Math.floor(totalSeconds / (24 * 60 * 60));
+    const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+
+    if (days > 0) {
+      return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+    if (hours > 0) {
+      return `${hours}h ${minutes}m ${seconds}s`;
+    }
+    return `${seconds}s`;
   };
 
   return (
     <div>
       {errorMessage ? (
         <p className="text-red-600 font-bold">{errorMessage}</p>
-      ) : (
+      ) : canSubmit ? (
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -130,10 +152,10 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
               onChange={handleClassChange}
               className="p-2 my-1 rounded block border"
             >
-              <option className="text-black" value="DeathKnight">
+              <option className="text-black" value="Death Knight">
                 Death Knight
               </option>
-              <option className="text-black" value="DemonHunter">
+              <option className="text-black" value="Demon Hunter">
                 Demon Hunter
               </option>
               <option className="text-black" value="Druid">
@@ -180,13 +202,16 @@ const PlayerChoiceForm = ({ discordName }: { discordName: string }) => {
             } text-white px-4 py-2 rounded block mt-2`}
             type="submit"
           >
-            {canSubmit
-              ? loading
-                ? "Saving..."
-                : "Save"
-              : `Wait ${formatTime(cooldown)}`}
+            {canSubmit ? (loading ? "Saving..." : "Save") : `Locked in!`}
           </button>
         </form>
+      ) : (
+        <div className="text-center">
+          <p className="text-2xl">You are locked in!</p>
+          <p className="mb-4 italic text-sm text-gray-300">
+            (Message Regni if there is an issue with already being locked in)
+          </p>
+        </div>
       )}
     </div>
   );

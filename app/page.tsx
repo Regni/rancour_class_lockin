@@ -4,9 +4,12 @@ import LoginButtons from "../components/client_components/LoginButtons";
 import LogoutButtons from "../components/client_components/LogoutButtons";
 import PlayerChoiceForm from "@/components/client_components/PlayerChoiceForm";
 import RaiderList from "@/components/RaiderList";
+import { getAllRaiders } from "@/db/Raiders";
+import ClientRaiderList from "@/components/client_components/ClientRaiderlist";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
+  const raiders = await getAllRaiders();
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <header className="absolute top-4 right-4">
@@ -32,8 +35,10 @@ export default async function Home() {
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center gap-10 py-32 px-16 bg-white dark:bg-black sm:items-start">
         {session ? (
           <>
-            <PlayerChoiceForm discordName={session.user?.name as string} />
-            <RaiderList />
+            <ClientRaiderList
+              raiders={raiders}
+              discordName={session.user?.name as string}
+            />
           </>
         ) : (
           <p className="text-xl">
