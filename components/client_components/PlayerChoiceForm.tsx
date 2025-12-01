@@ -97,10 +97,6 @@ const PlayerChoiceForm = ({
   }, []);
 
   useEffect(() => {
-    console.log(playerInfo);
-  }, [playerInfo]);
-
-  useEffect(() => {
     let timer: NodeJS.Timeout;
     if (!canSubmit && cooldown > 0) {
       timer = setInterval(() => {
