@@ -1,6 +1,6 @@
 export const VALID_CHOICES = [
-  "DeathKnight",
-  "DemonHunter",
+  "Death Knight",
+  "Demon Hunter",
   "Druid",
   "Evoker",
   "Hunter",
