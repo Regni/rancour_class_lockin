@@ -43,6 +43,8 @@ const ClientRaiderList = ({
         return "https://wow.zamimg.com/images/wow/icons/large/classicon_warrior.jpg";
       case "Reroll Extraordinaire!":
         return "/BrentFace.png";
+      case "Tank":
+        return "/tankBadge.png";
       // question mark for unknown class or no choice
       default:
         return "https://wow.zamimg.com/images/wow/icons/large/inv_misc_questionmark.jpg";
